@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 
 
@@ -24,12 +24,8 @@ public class Settings extends AppCompatActivity {
     TextView fromUnitTextSettings;
     TextView toUnitTextSettings;
 
-    ArrayList<String> lengthList;
-    ArrayList<String> volumeList;
-    ArrayAdapter<String> adapter;
-
-    static final String VOLUME = "VOLUME";
-    static final String LENGTH = "LENGTH";
+    ArrayAdapter<UnitsConverter.LengthUnits> lengthAdapter;
+    ArrayAdapter<UnitsConverter.VolumeUnits> volumeAdapter;
 
     String currentCalc;
     String toSpinnerSelected;
@@ -47,8 +43,8 @@ public class Settings extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Add lists for length and volume
-        lengthList = new ArrayList<>(Arrays.asList("Yards", "Meters", "Miles"));
-        volumeList = new ArrayList<>(Arrays.asList("Liters", "Gallons", "Quarts"));
+        List<UnitsConverter.LengthUnits> lengthList = Arrays.asList(UnitsConverter.LengthUnits.values());
+        List<UnitsConverter.VolumeUnits> volumeList = Arrays.asList(UnitsConverter.VolumeUnits.values());
 
         fromSpinner = findViewById(R.id.fromSpinner);
         toSpinner = findViewById(R.id.toSpinner);
@@ -63,6 +59,7 @@ public class Settings extends AppCompatActivity {
         if (payload.hasExtra("currentCalc")) {
             currentCalc = payload.getStringExtra("currentCalc");
         }
+
         // Set text from intent
         if (payload.hasExtra("fromUnitTextSettings")) {
             initialFromTextUnit = payload.getStringExtra("fromUnitTextSettings");
@@ -74,30 +71,36 @@ public class Settings extends AppCompatActivity {
         }
 
         switch (currentCalc) {
-            case VOLUME:
-                adapter = new ArrayAdapter<>(this,
+            case "volume":
+                volumeAdapter = new ArrayAdapter<>(this,
                         android.R.layout.simple_spinner_item, volumeList);
                 fromTextSel = volumeList.indexOf(initialToTextUnit);
                 toTextSel = volumeList.indexOf(initialFromTextUnit);
-                break;
-            case LENGTH:
-                adapter = new ArrayAdapter<>(this,
+
+                fromSpinner.setAdapter(volumeAdapter);
+                fromSpinner.setSelection(fromTextSel);
+
+                toSpinner.setAdapter(volumeAdapter);
+                toSpinner.setSelection(toTextSel);
+            case "length":
+                lengthAdapter = new ArrayAdapter<>(this,
                         android.R.layout.simple_spinner_item, lengthList);
                 fromTextSel = lengthList.indexOf(initialToTextUnit);
                 toTextSel = lengthList.indexOf(initialFromTextUnit);
-                break;
+
+                fromSpinner.setAdapter(lengthAdapter);
+                fromSpinner.setSelection(fromTextSel);
+
+                toSpinner.setAdapter(lengthAdapter);
+                toSpinner.setSelection(toTextSel);
         }
 
-        fromSpinner.setAdapter(adapter);
-        fromSpinner.setSelection(fromTextSel);
 
-        toSpinner.setAdapter(adapter);
-        toSpinner.setSelection(toTextSel);
 
         fromSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                fromSpinnerSelected = (String) adapterView.getItemAtPosition(i);
+                fromSpinnerSelected =  adapterView.getItemAtPosition(i).toString();
                 toUnitTextSettings.setText(fromSpinnerSelected);
             }
 
@@ -110,7 +113,7 @@ public class Settings extends AppCompatActivity {
         toSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                toSpinnerSelected = (String) adapterView.getItemAtPosition(i);
+                toSpinnerSelected = adapterView.getItemAtPosition(i).toString();
                 fromUnitTextSettings.setText(toSpinnerSelected);
             }
 

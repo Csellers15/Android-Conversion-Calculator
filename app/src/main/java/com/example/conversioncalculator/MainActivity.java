@@ -39,9 +39,6 @@ public class MainActivity extends AppCompatActivity {
     //Mode
     public String mode = "length";
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //Calcuate
+        //Calculate
         calculateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
