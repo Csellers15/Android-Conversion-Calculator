@@ -2,6 +2,10 @@ package com.example.conversioncalculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -138,5 +142,46 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        Intent payload = getIntent();
+        if (payload.hasExtra("fromUnitText")) {
+            fromLabel.setText(payload.getStringExtra("fromUnitText"));
+        }
+        if (payload.hasExtra("toUnitText")) {
+            toLabel.setText(payload.getStringExtra("toUnitText"));
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.navbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem settingsItem) {
+        switch (settingsItem.getItemId()) {
+            case R.id.settings:
+                Intent switchToSettings = new Intent(MainActivity.this, Settings.class);
+                switchToSettings.putExtra("fromLabelSetting", fromLabel.getText());
+                switchToSettings.putExtra("toLabelSettings", toLabel.getText());
+                switchToSettings.putExtra("currentCalc", mode);
+
+                startActivityForResult(switchToSettings, 1);
+        }
+        return super.onOptionsItemSelected(settingsItem);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 1) {
+
+            fromLabel.setText(data.getStringExtra("fromUnitText"));
+            toLabel.setText(data.getStringExtra("toUnitText"));
+        }
+
     }
 }
