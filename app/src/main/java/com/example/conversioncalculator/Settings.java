@@ -54,21 +54,17 @@ public class Settings extends AppCompatActivity {
         toUnitTextSettings = findViewById(R.id.fromUnitTextSettings);
         fromUnitTextSettings = findViewById(R.id.toUnitTextSettings);
 
-        // Start intent
+        //Sets the mode/ and texts  from the intent
         Intent payload = getIntent();
-        if (payload.hasExtra("mode")) {
+        try{
             mode = payload.getStringExtra("mode");
-
-        }
-
-        // Set text from intent
-        if (payload.hasExtra("fromLabel")) {
             initialFromTextUnit = payload.getStringExtra("fromLabel");
             fromUnitTextSettings.setText(initialFromTextUnit);
-        }
-        if (payload.hasExtra("toLabel")) {
             initialToTextUnit = payload.getStringExtra("toLabel");
             toUnitTextSettings.setText(initialToTextUnit);
+
+        } catch(Exception e) {
+            System.out.println("Error " + e.getMessage());
         }
 
 
