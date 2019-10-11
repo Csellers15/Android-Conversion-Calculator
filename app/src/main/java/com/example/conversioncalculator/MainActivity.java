@@ -88,16 +88,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        Intent payload = getIntent();
-        try{
-            fromLabel.setText(payload.getStringExtra("fromUnit"));
-            toLabel.setText(payload.getStringExtra("toUnit"));
-        } catch (Exception e){
-            System.out.println("Error " + e.getMessage());
-        }
-
-
         //Calculate
         calculateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     @Override

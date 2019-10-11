@@ -15,7 +15,6 @@ import java.util.Arrays;
 
 
 public class Settings extends AppCompatActivity {
-
     //Spinners
     Spinner fromSpinner;
     Spinner toSpinner;
@@ -31,14 +30,18 @@ public class Settings extends AppCompatActivity {
     ArrayAdapter<UnitsConverter.LengthUnits> lengthAdapter;
     ArrayAdapter<UnitsConverter.VolumeUnits> volumeAdapter;
 
+    //selected
+    String toSelected;
+    String fromSelected;
+
     //Various Variables needed
     String mode;
-    String toSpinnerSelected;
-    String fromSpinnerSelected;
     String initFromUnit;
     String initToUnit;
-    int toTextSel;
-    int fromTextSel;
+
+    //For Spinner Selection
+    int toText;
+    int fromText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,62 +70,61 @@ public class Settings extends AppCompatActivity {
             initToUnit = payload.getStringExtra("toLabel");
             fromUnit.setText(initFromUnit);
             toUnit.setText(initToUnit);
-
         } catch(Exception e) {
             System.out.println("Error " + e.getMessage());
         }
 
+        //sets up spinners
         if(mode.equals("volume")) {
             volumeAdapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_spinner_item, volumeList);
-            fromTextSel = volumeList.indexOf(UnitsConverter.VolumeUnits.valueOf(initFromUnit));
-            toTextSel = volumeList.indexOf(UnitsConverter.VolumeUnits.valueOf(initToUnit));
+            fromText = volumeList.indexOf(UnitsConverter.VolumeUnits.valueOf(initFromUnit));
+            toText = volumeList.indexOf(UnitsConverter.VolumeUnits.valueOf(initToUnit));
 
             fromSpinner.setAdapter(volumeAdapter);
-            fromSpinner.setSelection(fromTextSel);
+            fromSpinner.setSelection(fromText);
 
             toSpinner.setAdapter(volumeAdapter);
-            toSpinner.setSelection(toTextSel);
+            toSpinner.setSelection(toText);
         } else {
             lengthAdapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_spinner_item, lengthList);
 
-            //fromTextSel = lengthList.indexOf(initToUnit);
-            fromTextSel = lengthList.indexOf(UnitsConverter.LengthUnits.valueOf(initFromUnit));
-            toTextSel = lengthList.indexOf(UnitsConverter.LengthUnits.valueOf(initToUnit));
+            fromText = lengthList.indexOf(UnitsConverter.LengthUnits.valueOf(initFromUnit));
+            toText = lengthList.indexOf(UnitsConverter.LengthUnits.valueOf(initToUnit));
 
             fromSpinner.setAdapter(lengthAdapter);
-            fromSpinner.setSelection(fromTextSel);
+            fromSpinner.setSelection(fromText);
 
             toSpinner.setAdapter(lengthAdapter);
-            toSpinner.setSelection(toTextSel);
+            toSpinner.setSelection(toText);
         }
 
+        //gets Selected item
         fromSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                fromSpinnerSelected =  adapterView.getItemAtPosition(i).toString();
-                fromUnit.setText(fromSpinnerSelected);
+                fromSelected =  adapterView.getItemAtPosition(i).toString();
+                fromUnit.setText(fromSelected);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
+            public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
+        //gets Selected item
         toSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                toSpinnerSelected = adapterView.getItemAtPosition(i).toString();
-                toUnit.setText(toSpinnerSelected);
+                toSelected = adapterView.getItemAtPosition(i).toString();
+                toUnit.setText(toSelected);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+            public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
+        //passes data back
         floatingActionButton.setOnClickListener(e -> {
             Intent switchToMain = new Intent(Settings.this, MainActivity.class);
             switchToMain.putExtra("fromUnit", fromUnit.getText());
