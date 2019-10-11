@@ -72,19 +72,6 @@ public class Settings extends AppCompatActivity {
             System.out.println("Error " + e.getMessage());
         }
 
-
-        /****************************GOOD UNTIL HERE*********************************/
-        /*
-            TODO:
-                When App starts its not showing units
-
-             Fixed this morning.
-                conversions arent right? but like, they should be so who knows
-                cant do volume apparently? mode issue? ive been programming for how long? who knows?
-                keyboard disappear on click, can do that but other issues took up all my time
-                Doesnt load in correct units on settings page, because why would they?
-         */
-
         if(mode.equals("volume")) {
             volumeAdapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_spinner_item, volumeList);
