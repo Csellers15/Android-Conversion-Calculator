@@ -21,8 +21,8 @@ public class Settings extends AppCompatActivity {
 
     FloatingActionButton floatingActionButton;
 
-    TextView fromUnitTextSettings;
-    TextView toUnitTextSettings;
+    TextView fromUnit;
+    TextView toUnit;
 
     ArrayAdapter<UnitsConverter.LengthUnits> lengthAdapter;
     ArrayAdapter<UnitsConverter.VolumeUnits> volumeAdapter;
@@ -30,8 +30,8 @@ public class Settings extends AppCompatActivity {
     String mode;
     String toSpinnerSelected;
     String fromSpinnerSelected;
-    String initialFromTextUnit;
-    String initialToTextUnit;
+    String initFromUnit;
+    String initToUnit;
     int toTextSel;
     int fromTextSel;
 
@@ -51,17 +51,17 @@ public class Settings extends AppCompatActivity {
 
         floatingActionButton = findViewById(R.id.floatingActionButton);
 
-        toUnitTextSettings = findViewById(R.id.fromUnitTextSettings);
-        fromUnitTextSettings = findViewById(R.id.toUnitTextSettings);
+        toUnit = findViewById(R.id.fromUnit);
+        fromUnit = findViewById(R.id.toUnit);
 
         //Sets the mode/ and texts  from the intent
         Intent payload = getIntent();
         try{
             mode = payload.getStringExtra("mode");
-            initialFromTextUnit = payload.getStringExtra("fromLabel");
-            fromUnitTextSettings.setText(initialFromTextUnit);
-            initialToTextUnit = payload.getStringExtra("toLabel");
-            toUnitTextSettings.setText(initialToTextUnit);
+            initFromUnit = payload.getStringExtra("fromLabel");
+            initToUnit = payload.getStringExtra("toLabel");
+            fromUnit.setText(initFromUnit);
+            toUnit.setText(initToUnit);
 
         } catch(Exception e) {
             System.out.println("Error " + e.getMessage());
@@ -71,18 +71,17 @@ public class Settings extends AppCompatActivity {
         /****************************GOOD UNTIL HERE*********************************/
         /*
             TODO:
-                keyboard disappear on click
-                cant do volume
-                from changes to?
-                to changes from?
-                doesnt load in correct units on settings page
+                keyboard disappear on click, can do that but other issues took up all my time
+                cant do volume apparently? mode issue? ive been programming for how long? who knows?
+                conversions arent right? but like, they should be so who knows
+                Doesnt load in correct units on settings page, because why would they?
          */
 
         if(mode == "volume") {
             volumeAdapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_spinner_item, volumeList);
-            fromTextSel = volumeList.indexOf(initialToTextUnit);
-            toTextSel = volumeList.indexOf(initialFromTextUnit);
+            fromTextSel = volumeList.indexOf(initToUnit);
+            toTextSel = volumeList.indexOf(initFromUnit);
 
             fromSpinner.setAdapter(volumeAdapter);
             fromSpinner.setSelection(fromTextSel);
@@ -92,8 +91,8 @@ public class Settings extends AppCompatActivity {
         } else {
             lengthAdapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_spinner_item, lengthList);
-            fromTextSel = lengthList.indexOf(initialToTextUnit);
-            toTextSel = lengthList.indexOf(initialFromTextUnit);
+            fromTextSel = lengthList.indexOf(initToUnit);
+            toTextSel = lengthList.indexOf(initFromUnit);
 
             fromSpinner.setAdapter(lengthAdapter);
             fromSpinner.setSelection(fromTextSel);
@@ -106,7 +105,7 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 fromSpinnerSelected =  adapterView.getItemAtPosition(i).toString();
-                toUnitTextSettings.setText(fromSpinnerSelected);
+                fromUnit.setText(fromSpinnerSelected);
             }
 
             @Override
@@ -118,7 +117,7 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 toSpinnerSelected = adapterView.getItemAtPosition(i).toString();
-                fromUnitTextSettings.setText(toSpinnerSelected);
+                toUnit.setText(toSpinnerSelected);
             }
 
             @Override
@@ -129,8 +128,8 @@ public class Settings extends AppCompatActivity {
 
         floatingActionButton.setOnClickListener(e -> {
             Intent switchToMain = new Intent(Settings.this, MainActivity.class);
-            switchToMain.putExtra("fromUnitText", fromUnitTextSettings.getText());
-            switchToMain.putExtra("toUnitText", toUnitTextSettings.getText());
+            switchToMain.putExtra("fromUnit", fromUnit.getText());
+            switchToMain.putExtra("toUnit", toUnit.getText());
             switchToMain.putExtra("mode", mode);
 
             setResult(1, switchToMain);

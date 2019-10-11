@@ -87,6 +87,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        Intent payload = getIntent();
+        try{
+            fromLabel.setText(payload.getStringExtra("fromUnit"));
+            toLabel.setText(payload.getStringExtra("toUnit"));
+        } catch (Exception e){
+            System.out.println("Error " + e.getMessage());
+        }
+
+
         //Calculate
         calculateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,15 +149,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        Intent payload = getIntent();
-        if (payload.hasExtra("fromUnitText")) {
-            fromLabel.setText(payload.getStringExtra("fromUnitText"));
-        }
-        if (payload.hasExtra("toUnitText")) {
-            toLabel.setText(payload.getStringExtra("toUnitText"));
-        }
-
     }
 
     @Override
@@ -175,9 +175,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 1) {
-
-            fromLabel.setText(data.getStringExtra("fromUnitText"));
-            toLabel.setText(data.getStringExtra("toUnitText"));
+            fromLabel.setText(data.getStringExtra("fromUnit"));
+            toLabel.setText(data.getStringExtra("toUnit"));
         }
 
     }
