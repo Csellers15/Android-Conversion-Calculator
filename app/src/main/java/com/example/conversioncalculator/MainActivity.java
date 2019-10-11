@@ -163,9 +163,9 @@ public class MainActivity extends AppCompatActivity {
         switch (settingsItem.getItemId()) {
             case R.id.settings:
                 Intent switchToSettings = new Intent(MainActivity.this, Settings.class);
-                switchToSettings.putExtra("fromLabelSetting", fromLabel.getText());
-                switchToSettings.putExtra("toLabelSettings", toLabel.getText());
-                switchToSettings.putExtra("currentCalc", mode);
+                switchToSettings.putExtra("fromLabel", fromLabel.getText());
+                switchToSettings.putExtra("toLabel", toLabel.getText());
+                switchToSettings.putExtra("mode", mode);
 
                 startActivityForResult(switchToSettings, 1);
         }
