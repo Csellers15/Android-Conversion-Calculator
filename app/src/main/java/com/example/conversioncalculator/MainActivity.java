@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.view.View;
 import android.widget.TextView;
+import android.view.inputmethod.InputMethodManager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         clearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dismissKeyboard();
                 fromValue.getText().clear();
                 toValue.getText().clear();
             }
@@ -100,13 +102,13 @@ public class MainActivity extends AppCompatActivity {
         calculateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(mode == "length"){
-                    if(!fromValue.getText().toString().equals("")){
+                dismissKeyboard();
+                if (mode == "length") {
+                    if (!fromValue.getText().toString().equals("") && fromValue.hasFocus()) {
                         Double fromVal = Double.parseDouble(fromValue.getText().toString());
                         Double conv = UnitsConverter.convert(fromVal, fromLength, toLength);
                         toValue.setText(conv.toString());
-                    } else if (!toValue.getText().toString().equals("")){
+                    } else if (!toValue.getText().toString().equals("") && toValue.hasFocus()) {
                         Double toVal = Double.parseDouble(toValue.getText().toString());
                         Double conv = UnitsConverter.convert(toVal, toLength, fromLength);
                         fromValue.setText(conv.toString());
@@ -116,11 +118,11 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 } else {
-                    if(!fromValue.getText().toString().equals("")){
+                    if (!fromValue.getText().toString().equals("")) {
                         Double fromVal = Double.parseDouble(fromValue.getText().toString());
                         Double conv = UnitsConverter.convert(fromVal, fromVol, toVol);
                         toValue.setText(conv.toString());
-                    } else if (!toValue.getText().toString().equals("")){
+                    } else if (!toValue.getText().toString().equals("")) {
                         Double toVal = Double.parseDouble(toValue.getText().toString());
                         Double conv = UnitsConverter.convert(toVal, toVol, fromVol);
                         fromValue.setText(conv.toString());
@@ -138,10 +140,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(mode == "length"){
+                    dismissKeyboard();
                     fromLabel.setText(fromVol.toString());
                     toLabel.setText(toVol.toString());
                     mode = "volume";
                 } else {
+                    dismissKeyboard();
                     fromLabel.setText(fromLength.toString());
                     toLabel.setText(toLength.toString());
                     mode = "length";
@@ -162,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem settingsItem) {
         switch (settingsItem.getItemId()) {
             case R.id.settings:
-                Intent switchToSettings = new Intent(MainActivity.this, Settings.class);
+                              Intent switchToSettings = new Intent(MainActivity.this, Settings.class);
                 switchToSettings.putExtra("fromLabel", fromLabel.getText());
                 switchToSettings.putExtra("toLabel", toLabel.getText());
                 switchToSettings.putExtra("mode", mode);
@@ -177,7 +181,24 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == 1) {
             fromLabel.setText(data.getStringExtra("fromUnit"));
             toLabel.setText(data.getStringExtra("toUnit"));
+
+            if(mode == "length") {
+                fromLength = UnitsConverter.LengthUnits.valueOf(fromLabel.getText().toString());
+                toLength = UnitsConverter.LengthUnits.valueOf(toLabel.getText().toString());
+            } else {
+                fromVol = UnitsConverter.VolumeUnits.valueOf(fromLabel.getText().toString());
+                toVol = UnitsConverter.VolumeUnits.valueOf(toLabel.getText().toString());
+            }
         }
 
+    }
+
+    void dismissKeyboard() {
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            // keyboard already hidden
+        }
     }
 }

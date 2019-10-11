@@ -16,17 +16,22 @@ import java.util.Arrays;
 
 public class Settings extends AppCompatActivity {
 
+    //Spinners
     Spinner fromSpinner;
     Spinner toSpinner;
 
+    //"Save Button"
     FloatingActionButton floatingActionButton;
 
+    //Labels
     TextView fromUnit;
     TextView toUnit;
 
+    //Adapters
     ArrayAdapter<UnitsConverter.LengthUnits> lengthAdapter;
     ArrayAdapter<UnitsConverter.VolumeUnits> volumeAdapter;
 
+    //Various Variables needed
     String mode;
     String toSpinnerSelected;
     String fromSpinnerSelected;
@@ -51,10 +56,10 @@ public class Settings extends AppCompatActivity {
 
         floatingActionButton = findViewById(R.id.floatingActionButton);
 
-        toUnit = findViewById(R.id.fromUnit);
-        fromUnit = findViewById(R.id.toUnit);
+        toUnit = findViewById(R.id.toUnit);
+        fromUnit = findViewById(R.id.fromUnit);
 
-        //Sets the mode/ and texts  from the intent
+        //Sets the mode and texts from the intent
         Intent payload = getIntent();
         try{
             mode = payload.getStringExtra("mode");
@@ -71,17 +76,20 @@ public class Settings extends AppCompatActivity {
         /****************************GOOD UNTIL HERE*********************************/
         /*
             TODO:
-                keyboard disappear on click, can do that but other issues took up all my time
-                cant do volume apparently? mode issue? ive been programming for how long? who knows?
+                When App starts its not showing units
+
+             Fixed this morning.
                 conversions arent right? but like, they should be so who knows
+                cant do volume apparently? mode issue? ive been programming for how long? who knows?
+                keyboard disappear on click, can do that but other issues took up all my time
                 Doesnt load in correct units on settings page, because why would they?
          */
 
-        if(mode == "volume") {
+        if(mode.equals("volume")) {
             volumeAdapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_spinner_item, volumeList);
-            fromTextSel = volumeList.indexOf(initToUnit);
-            toTextSel = volumeList.indexOf(initFromUnit);
+            fromTextSel = volumeList.indexOf(UnitsConverter.VolumeUnits.valueOf(initFromUnit));
+            toTextSel = volumeList.indexOf(UnitsConverter.VolumeUnits.valueOf(initToUnit));
 
             fromSpinner.setAdapter(volumeAdapter);
             fromSpinner.setSelection(fromTextSel);
@@ -91,8 +99,10 @@ public class Settings extends AppCompatActivity {
         } else {
             lengthAdapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_spinner_item, lengthList);
-            fromTextSel = lengthList.indexOf(initToUnit);
-            toTextSel = lengthList.indexOf(initFromUnit);
+
+            //fromTextSel = lengthList.indexOf(initToUnit);
+            fromTextSel = lengthList.indexOf(UnitsConverter.LengthUnits.valueOf(initFromUnit));
+            toTextSel = lengthList.indexOf(UnitsConverter.LengthUnits.valueOf(initToUnit));
 
             fromSpinner.setAdapter(lengthAdapter);
             fromSpinner.setSelection(fromTextSel);
