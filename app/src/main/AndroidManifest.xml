@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".HistoryActivity"
+            android:label="@string/title_activity_history"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".Settings"
             android:label="@string/title_activity_settings_screen"
             android:parentActivityName=".MainActivity"
