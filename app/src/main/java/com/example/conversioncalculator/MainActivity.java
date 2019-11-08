@@ -161,6 +161,9 @@ public class MainActivity extends AppCompatActivity {
                 switchToSettings.putExtra("mode", mode);
 
                 startActivityForResult(switchToSettings, 1);
+            case R.id.action_history:
+                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+                startActivityForResult(intent, 1 );
         }
         return super.onOptionsItemSelected(settingsItem);
     }

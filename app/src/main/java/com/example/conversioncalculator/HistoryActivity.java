@@ -10,9 +10,16 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity
+        implements HistoryFragment.OnListFragmentInteractionListener  {
 
-    @Override
+        @Override
+        public void onListFragmentInteraction(DummyContent.DummyItem item) {
+            System.out.println("Interact!");
+        }
+
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
